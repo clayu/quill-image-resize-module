@@ -125,8 +125,12 @@ export default class ImageResize {
         // Create and add the overlay
         this.overlay = document.createElement('div');
         Object.assign(this.overlay.style, this.options.overlayStyles);
-
         this.quill.root.parentNode.appendChild(this.overlay);
+				
+        // Create and add the overlay
+        this.cropOverlay = document.createElement('div');
+        Object.assign(this.cropOverlay.style, this.options.cropOverlayStyles);
+        this.quill.root.parentNode.appendChild(this.cropOverlay);
 
         this.repositionElements();
     };
@@ -138,7 +142,9 @@ export default class ImageResize {
 
         // Remove the overlay
         this.quill.root.parentNode.removeChild(this.overlay);
+        this.quill.root.parentNode.removeChild(this.cropOverlay);
         this.overlay = undefined;
+        this.cropOverlay = undefined;
 
         // stop listening for image deletion or movement
         document.removeEventListener('keyup', this.checkImage);
@@ -149,14 +155,20 @@ export default class ImageResize {
     };
 
     repositionElements = () => {
-        if (!this.overlay || !this.img) {
+        if (!this.overlay || !this.img /*|| !this.crop || !this.cropOverlay*/) {
             return;
         }
 
         // position the overlay over the image
         const parent = this.quill.root.parentNode;
         const imgRect = this.img.getBoundingClientRect();
-        const containerRect = parent.getBoundingClientRect();
+        const containerRect = parent.getBoundingClientRect();		
+        const cropRect = {
+			top: 	+(this.img.getAttribute("data-crop-top") 	|| 0),
+			bottom:	+(this.img.getAttribute("data-crop-bottom") || 0),
+			left:	+(this.img.getAttribute("data-crop-left") 	|| 0),
+			right:	+(this.img.getAttribute("data-crop-right") 	|| 0)
+		};
 
         Object.assign(this.overlay.style, {
             left: `${imgRect.left - containerRect.left - 1 + parent.scrollLeft}px`,
@@ -164,6 +176,21 @@ export default class ImageResize {
             width: `${imgRect.width}px`,
             height: `${imgRect.height}px`,
         });
+		
+        Object.assign(this.cropOverlay.style, {
+			borderLeftWidth:`${imgRect.width*cropRect.left}px`,
+			borderRightWidth:`${imgRect.width*cropRect.right}px`,
+			//borderRightWidth:`${cropRect.right }px`,
+			borderTopWidth:`${imgRect.height*cropRect.top }px`,
+			borderBottomWidth:`${imgRect.height*cropRect.bottom }px`,
+            left: `${imgRect.left - containerRect.left - 1 + parent.scrollLeft }px`,
+            top: `${imgRect.top - containerRect.top + parent.scrollTop}px`,
+            width: `${imgRect.width  }px`,
+            height: `${imgRect.height}px`,
+        });
+		
+		
+		
     };
 
     hide = () => {

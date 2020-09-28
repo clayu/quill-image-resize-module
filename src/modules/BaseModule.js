@@ -1,9 +1,14 @@
 export class BaseModule {
     constructor(resizer) {
         this.overlay = resizer.overlay;
+        this.cropOverlay = resizer.cropOverlay;
         this.img = resizer.img;
         this.options = resizer.options;
         this.requestUpdate = resizer.onUpdate;
+		
+		this.img.style.objectPosition= "-99999px 99999px";
+		this.img.style.backgroundImage= "url('"+this.img.src+"')";
+		
     }
     /*
         requestUpdate (passed in by the library during construction, above) can be used to let the library know that

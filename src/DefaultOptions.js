@@ -8,6 +8,17 @@ export default {
         position: 'absolute',
         boxSizing: 'border-box',
         border: '1px dashed #444',
+		pointerEvents:'none',
+		background: "black",
+		mixBlendMode: "lighten",
+    },
+    cropOverlayStyles: {
+        position: 'absolute',
+        boxSizing: 'border-box',
+        border: '0px solid rgba(0,0,0,.4)',
+		pointerEvents:'none',
+		// background: "white",
+		// mixBlendMode: "multiply",
     },
     handleStyles: {
         position: 'absolute',
@@ -17,6 +28,7 @@ export default {
         border: '1px solid #777',
         boxSizing: 'border-box',
         opacity: '0.80',
+		pointerEvents:'all'
     },
     displayStyles: {
         position: 'absolute',
