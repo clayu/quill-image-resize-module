@@ -1,7 +1,7 @@
 export default {
     modules: [
-        'DisplaySize',
-        'Toolbar',
+        //'DisplaySize',
+       // 'Toolbar',
         'Resize',
     ],
     overlayStyles: {
@@ -28,7 +28,8 @@ export default {
         border: '1px solid #777',
         boxSizing: 'border-box',
         opacity: '0.80',
-		pointerEvents:'all'
+		pointerEvents:'all',
+		cursor:"pointer",
     },
     displayStyles: {
         position: 'absolute',

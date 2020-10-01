@@ -60,9 +60,12 @@ export class Resize extends BaseModule {
 		this.img.setAttribute("data-full-width",this.img.width);
 		var h = this.img.height* (1- (this.crop.top+this.crop.bottom));
 		var w  = this.img.width* (1- (this.crop.left+this.crop.right));
+		this.img.style.backgroundSize=this.img.width+"px";
 		this.img.height =h;
 		this.img.width=w;
 		this.img.style.width=null;
+		this.img.qqq="hi";
+		this.onUpdate();
 		
         this.img.removeEventListener('mousedown', this.handleMousedownPan);	
     };
@@ -85,7 +88,7 @@ export class Resize extends BaseModule {
 		
 		this.fixCropBoxes();
 		
-    };
+    }; 
 	
 	fixCropBoxes = () =>{		
         // const handleLeftOffset = `${-1 + this.crop.left}px`;
@@ -93,7 +96,7 @@ export class Resize extends BaseModule {
         // const handleTopOffset = `${-1 + this.crop.top}px`;
         // const handleBottomOffset = `${-1 + this.crop.bottom}px`;
 		
-        const handleLeftOffset = `${-1 }px`;
+        const handleLeftOffset = `${-1}px`;
         const handleRightOffset = `${-1 }px`;
         const handleTopOffset = `${-1 }px`;
         const handleBottomOffset = `${-1 }px`;
@@ -236,6 +239,7 @@ export class Resize extends BaseModule {
         document.removeEventListener('mousemove', this.handleDragCrop);
         document.removeEventListener('mouseup', this.handleMouseupCrop);
 		
+		this.img.style.cursor = "move";
 		
 		
     };

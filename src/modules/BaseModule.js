@@ -8,6 +8,9 @@ export class BaseModule {
 		
 		this.img.style.objectPosition= "-99999px 99999px";
 		this.img.style.backgroundImage= "url('"+this.img.src+"')";
+		if (this.img.style.backgroundSize==""){
+			this.img.style.backgroundSize= "100%";
+		}
 		
     }
     /*

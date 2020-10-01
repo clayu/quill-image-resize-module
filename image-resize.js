@@ -366,6 +366,9 @@ var BaseModule = function BaseModule(resizer) {
 
     this.img.style.objectPosition = "-99999px 99999px";
     this.img.style.backgroundImage = "url('" + this.img.src + "')";
+    if (this.img.style.backgroundSize == "") {
+        this.img.style.backgroundSize = "100%";
+    }
 }
 /*
     requestUpdate (passed in by the library during construction, above) can be used to let the library know that
@@ -1065,7 +1068,10 @@ module.exports = keysIn;
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = ({
-    modules: ['DisplaySize', 'Toolbar', 'Resize'],
+    modules: [
+    //'DisplaySize',
+    // 'Toolbar',
+    'Resize'],
     overlayStyles: {
         position: 'absolute',
         boxSizing: 'border-box',
@@ -1088,7 +1094,8 @@ module.exports = keysIn;
         border: '1px solid #777',
         boxSizing: 'border-box',
         opacity: '0.80',
-        pointerEvents: 'all'
+        pointerEvents: 'all',
+        cursor: "pointer"
     },
     displayStyles: {
         position: 'absolute',
@@ -1222,67 +1229,25 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// var Image = Quill.import('formats/image');
-
-
-// class ResizableImage extends Image {
-// static get ATTRIBUTES() {
-// debugger;
-// return [ 'src','alt', 'height', 'width', 'class', 'data-full-width', 'data-full-height','data-crop-top','data-crop-bottom','data-crop-left','data-crop-right','data-pan-top','data-pan-left','style']
-// }
-
-// static formats(domNode) {
-// return this.ATTRIBUTES.reduce(function(formats, attribute) {
-// if (domNode.hasAttribute(attribute)) {
-// formats[attribute] = domNode.getAttribute(attribute);
-// }
-// return formats;
-// }, {});
-// }
-
-// format(name, value) {
-// if (this.constructor.ATTRIBUTES.indexOf(name) > -1) {
-// if (value) {
-// this.domNode.setAttribute(name, value);
-// } else {
-// this.domNode.removeAttribute(name);
-// }
-// } else {
-// super.format(name, value);
-// }
-// }
-// }
-
-// ResizableImage.blotName = 'imageBlot';
-// ResizableImage.className = 'image-blot';
-// ResizableImage.tagName = 'img';
-
-// Quill.register({"formats/image":ResizableImage});
-
-
-//import {Quill} from 'react-quill';
 var Parchment = Quill.import('parchment');
 var BaseImage = Quill.import('formats/image');
 
-var ATTRIBUTES = ['alt', 'height', 'width', 'style'];
+var ATTRIBUTES = ['alt', 'height', 'width', 'style', 'data-full-width', 'data-full-height', 'data-crop-top', 'data-crop-bottom', 'data-crop-left', 'data-crop-right', 'data-pan-top', 'data-pan-left'];
 
-var WHITE_STYLE = ['margin', 'display', 'float'];
+var WHITE_STYLE = ['margin', 'display', 'float', 'object-position', 'background-image', 'background-position', 'background-repeat', 'background-size'];
 
-var Image = function (_BaseImage) {
-  _inherits(Image, _BaseImage);
+var Image2 = function (_BaseImage) {
+  _inherits(Image2, _BaseImage);
 
-  function Image() {
-    _classCallCheck(this, Image);
+  function Image2() {
+    _classCallCheck(this, Image2);
 
-    return _possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (Image2.__proto__ || Object.getPrototypeOf(Image2)).apply(this, arguments));
   }
 
-  _createClass(Image, [{
+  _createClass(Image2, [{
     key: 'format',
     value: function format(name, value) {
-      console.log("format");
-      ///debugger;
-
       if (ATTRIBUTES.indexOf(name) > -1) {
         if (value) {
           if (name === 'style') {
@@ -1294,7 +1259,7 @@ var Image = function (_BaseImage) {
           this.domNode.removeAttribute(name);
         }
       } else {
-        _get(Image.prototype.__proto__ || Object.getPrototypeOf(Image.prototype), 'format', this).call(this, name, value);
+        _get(Image2.prototype.__proto__ || Object.getPrototypeOf(Image2.prototype), 'format', this).call(this, name, value);
       }
     }
   }, {
@@ -1312,8 +1277,6 @@ var Image = function (_BaseImage) {
   }], [{
     key: 'formats',
     value: function formats(domNode) {
-      console.log("formats");
-      //debugger;
       return ATTRIBUTES.reduce(function (formats, attribute) {
         if (domNode.hasAttribute(attribute)) {
           formats[attribute] = domNode.getAttribute(attribute);
@@ -1323,11 +1286,12 @@ var Image = function (_BaseImage) {
     }
   }]);
 
-  return Image;
+  return Image2;
 }(BaseImage);
 
-Quill.register("formats/image", Image);
-/* harmony default export */ __webpack_exports__["a"] = (Image);
+console.log("[ResizeImage] registering image");
+Quill.register({ "formats/image": Image2 });
+/* unused harmony default export */ var _unused_webpack_default_export = (Image2);
 
 /***/ }),
 /* 36 */
@@ -1410,6 +1374,7 @@ var Resize = function (_BaseModule) {
             _this.img.setAttribute("data-full-width", _this.img.width);
             var h = _this.img.height * (1 - (_this.crop.top + _this.crop.bottom));
             var w = _this.img.width * (1 - (_this.crop.left + _this.crop.right));
+            _this.img.style.backgroundSize = _this.img.width + "px";
             _this.img.height = h;
             _this.img.width = w;
             _this.img.style.width = null;
@@ -1559,6 +1524,8 @@ var Resize = function (_BaseModule) {
             // stop listening for movement and mouseup
             document.removeEventListener('mousemove', _this.handleDragCrop);
             document.removeEventListener('mouseup', _this.handleMouseupCrop);
+
+            _this.img.style.cursor = "move";
         }, _this.handleDragCrop = function (evt) {
             if (!_this.img) {
                 // image not set yet
@@ -1866,8 +1833,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var knownModules = { DisplaySize: __WEBPACK_IMPORTED_MODULE_2__modules_DisplaySize__["a" /* DisplaySize */], Toolbar: __WEBPACK_IMPORTED_MODULE_3__modules_Toolbar__["a" /* Toolbar */], Resize: __WEBPACK_IMPORTED_MODULE_4__modules_Resize__["a" /* Resize */] };
 
-console.log("IMage", __WEBPACK_IMPORTED_MODULE_5__modules_ResizableImage__["a" /* default */]);
-
 /**
  * Custom module for quilljs to allow user to resize <img> elements
  * (Works on Chrome, Edge, Safari and replaces Firefox's native resize behavior)
@@ -1979,6 +1944,7 @@ var ImageResize = function ImageResize(quill) {
         document.removeEventListener('keyup', _this.checkImage);
         _this.quill.root.removeEventListener('input', _this.checkImage);
 
+        _this.img.style.cursor = "default";
         // reset user-select
         _this.setUserSelect('');
     };

@@ -3,8 +3,10 @@ import DefaultOptions from './DefaultOptions';
 import { DisplaySize } from './modules/DisplaySize';
 import { Toolbar } from './modules/Toolbar';
 import { Resize } from './modules/Resize';
+import Image2 from './modules/ResizableImage';
 
 const knownModules = { DisplaySize, Toolbar, Resize };
+
 
 /**
  * Custom module for quilljs to allow user to resize <img> elements
@@ -44,6 +46,10 @@ export default class ImageResize {
         this.moduleClasses = this.options.modules;
 
         this.modules = [];
+		
+		this.quill.on('editor-change', function(a,b,c) {
+			//debugger;
+		});
     }
 
     initializeModules = () => {
@@ -132,6 +138,7 @@ export default class ImageResize {
         Object.assign(this.cropOverlay.style, this.options.cropOverlayStyles);
         this.quill.root.parentNode.appendChild(this.cropOverlay);
 
+
         this.repositionElements();
     };
 
@@ -150,6 +157,7 @@ export default class ImageResize {
         document.removeEventListener('keyup', this.checkImage);
         this.quill.root.removeEventListener('input', this.checkImage);
 
+		this.img.style.cursor = "default";
         // reset user-select
         this.setUserSelect('');
     };
